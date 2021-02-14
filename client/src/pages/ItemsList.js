@@ -26,6 +26,12 @@ const Wrapper = styled.div`
     }
 `;
 
+const Button = styled.button.attrs({
+    className: 'btn btn-primary',
+})`
+  margin: 15px 15px 15px 5px;
+`;
+
 const Table = ({ columns, data }) => {
     const {
         getTableProps,
@@ -85,6 +91,7 @@ class ItemsTable extends Component {
 
     handleRemoveItem = data => {
         const itemId = data;
+        console.log('item being deleted', itemId)
 
         this.props.deleteSingleItem(itemId)
             .then(resp => {
@@ -93,6 +100,7 @@ class ItemsTable extends Component {
                 this.props.fetchAllItems();
             });
     }
+
 
     render() {
         const {
@@ -104,75 +112,98 @@ class ItemsTable extends Component {
 
         const columns = [
             {
-                Header: 'ID',
-                accessor: '_id',
+                Header: 'Image',
+                accessor: 'image',
                 // filterable: true,
                 Cell: props => {
                     console.log(props);
                     const { original } = props.cell.row;
                     return (
-                        <span data-item-id={original._id}>
+                        <span data-item-isbn={original.image_url_s}>
+                            <img src={original.image_url_s} alt="BookImage"/>
                             {props.value}
                         </span>
                     )
                 }
             },
             {
-                Header: 'Name',
-                accessor: 'name',
+                Header: 'Isbn',
+                accessor: 'isbn',
+                // filterable: true,
+                Cell: props => {
+                    console.log(props);
+                    const { original } = props.cell.row;
+                    return (
+                        <span data-item-isbn={original.isbn}>
+                            {props.value}
+                        </span>
+                    )
+                }
+            },
+            {
+                Header: 'Title',
+                accessor: 'title',
                 // filterable: true,
                 Cell: props => {
                     const { original } = props.cell.row;
                     return (
-                        <span data-name={original.name}>
+                        <Link
+                            data-update-isbn={original.isbn}
+                            to={`/item/${original.isbn}`}
+                        >
+                        <span data-item-title={original.title}>
+                            {props.value}
+                        </span>
+                        </Link>
+                    );
+                }
+            },
+            {
+                Header: 'Author',
+                accessor: 'author',
+                // filterable: true,
+                Cell: props => {
+                    const { original } = props.cell.row;
+                    return (
+                        <span data-author={original.author}>
                             {props.value}
                         </span>
                     );
                 }
             },
             {
-                Header: 'Day(s)',
-                accessor: 'daysOfWeek',
+                Header: 'Year of Publication',
+                accessor: 'publication_year',
                 // filterable: true,
                 Cell: props => {
-                    const { daysOfWeek } = props.cell.row.original;
-                    let daysToDisplay = "";
-                    if (daysOfWeek && typeof daysOfWeek === "object") {
-                        for (const day in daysOfWeek) {
-                            daysToDisplay = daysToDisplay === "" ? daysOfWeek[day] : `${daysToDisplay}, ${daysOfWeek[day]}`;
-                        }
-
-                    }
+                    const { original } = props.cell.row;
                     return (
-                        <span
-                            data-daysofweek={daysOfWeek && JSON.stringify(daysOfWeek)}
-                            data-daysofweek-by-id={props.value}
-                        >
-                            {daysToDisplay || "-"}
+                        <span data-author={original.publication_year}>
+                            {props.value}
                         </span>
                     );
                 }
             },
             {
-                Header: 'Timeframe',
-                accessor: 'timeframeNote',
+                Header: 'Copies',
+                accessor: 'copies',
                 Cell: props => {
                     const { original } = props.cell.row;
                     return (
-                        <span data-timeframe={original.timeframeNote}>
+                        <span data-copies={original.copies}>
                             {props.value || "-"}
                         </span>
                     );
                 },
             },
             {
-                Header: 'Priority',
-                accessor: 'priority',
+                Header: 'Available',
+                accessor: 'available',
                 // filterable: true,
                 Cell: props => {
                     const { original } = props.cell.row;
                     return (
-                        <span data-priority={original.priority}>
+                        <span data-available={original.available}>
                             {props.value}
                         </span>
                     );
@@ -185,8 +216,8 @@ class ItemsTable extends Component {
                     const { original } = props.cell.row;
                     return (
                         <Link
-                            data-update-id={original._id}
-                            to={`/item/update/${props.value}`}
+                            data-update-isbn={original.isbn}
+                            to={`/item/update/${original.isbn}`}
                         >
                             Update Item
                         </Link>
@@ -199,12 +230,28 @@ class ItemsTable extends Component {
                 Cell: props => {
                     const { original } = props.cell.row;
                     return (
-                        <span data-delete-id={original._id}>
+                        <span data-delete-isbn={original.isbn}>
                             <DeleteButton
-                                id={original._id}
+                                id={original.isbn}
                                 onDelete={this.handleRemoveItem}
                             />
                         </span>
+                    );
+                },
+            },
+            {
+                Header: 'Borrow/Return Book',
+                accessor: 'borrow',
+                Cell: props => {
+                    const { original } = props.cell.row;
+                    return (
+                        <Link
+                            data-borrow-isbn={original.isbn}
+                            to={`/item/borrow/${original.isbn}`}
+                        >
+                            Borrow/Return
+                        </Link>
+                        
                     );
                 },
             },
@@ -221,7 +268,7 @@ class ItemsTable extends Component {
                         columns={columns}
                     />
                 ) : (
-                    `No items to render... :(`
+                    `Loading books... `
                 )}
             </Wrapper>
         );

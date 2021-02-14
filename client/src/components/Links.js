@@ -9,6 +9,7 @@ const HomeWrapper = styled.div``;
 const Collapse = styled.div.attrs({
     // className: 'collapse navbar-collapse',
 })`
+
     @media screen and (max-width: 420px) {
         display: flex;
         flex-grow: 1;
@@ -64,7 +65,7 @@ class Links extends Component {
                                 to="/items"
                                 className="nav-link"
                             >
-                                Items
+                                Books
                             </Link>
                         </Item>
                         <Item>
@@ -72,12 +73,12 @@ class Links extends Component {
                                 to="/item/create"
                                 className="nav-link"
                             >
-                                Create Item
+                                Admin
                             </Link>
                         </Item>
                         <Item>
                             <Link to="/items/react-table-v6" className="nav-link">
-                                Items (react-table-v6)
+                                Books
                             </Link>
                         </Item>
                     </List>

@@ -45,70 +45,99 @@ class ItemsList extends Component {
 
         const columns = [
             {
-                Header: 'ID',
-                accessor: '_id',
+                Header: 'Image',
+                accessor: 'image',
                 filterable: true,
                 Cell: props => {
+                    console.log(props);
                     return (
-                        <span data-item-id={props.original._id}>
-                            {props.original._id}
+                        <span data-item-isbn={props.original.image_url_s}>
+                            <img src={props.original.image_url_s} alt="BookImage"/>
+                            {props.value}
                         </span>
                     )
                 }
             },
             {
-                Header: 'Name',
-                accessor: 'name',
+                Header: 'ISBN',
+                accessor: 'isbn',
                 filterable: true,
                 Cell: props => {
                     return (
-                        <span data-name={props.original.name}>
+                        <span data-item-id={props.original.isbn}>
+                            {props.original.isbn}
+                        </span>
+                    )
+                }
+            },
+            
+            {
+                Header: 'Title',
+                accessor: 'title',
+                filterable: true,
+                Cell: props => {
+                    return (
+                        <span data-title={props.original.title}>
                             {props.value}
                         </span>
                     );
                 }
             },
             {
-                Header: 'Day(s)',
-                accessor: 'daysOfWeek',
+                Header: 'Author',
+                accessor: 'author',
                 filterable: true,
                 Cell: props => {
-                    const { daysOfWeek } = props.original;
-                    let daysToDisplay = "";
-                    if (daysOfWeek && typeof daysOfWeek === "object") {
-                        for (const day in daysOfWeek) {
-                            daysToDisplay = daysToDisplay === "" ? daysOfWeek[day] : `${daysToDisplay}, ${daysOfWeek[day]}`;
-                        }
-
-                    }
                     return (
-                        <span
-                            data-daysofweek={daysOfWeek && JSON.stringify(daysOfWeek)}
-                            data-daysofweek-by-id={props.original._id}
-                        >
-                            {daysToDisplay || "-"}
+                        <span data-title={props.original.author}>
+                            {props.value}
                         </span>
                     );
                 }
             },
             {
-                Header: 'Timeframe',
-                accessor: 'timeframeNote',
+                Header: 'Publisher',
+                accessor: 'publisher',
+                filterable: true,
                 Cell: props => {
                     return (
-                        <span data-timeframe={props.original.timeframeNote}>
+                        <span data-title={props.original.publisher}>
+                            {props.value}
+                        </span>
+                    );
+                }
+            },
+            {
+                Header: 'Publication Year',
+                accessor: 'publication_year',
+                filterable: true,
+                Cell: props => {
+                    return (
+                        <span data-timeframe={props.original.publication_year}>
                             {props.value || "-"}
                         </span>
                     );
                 },
             },
             {
-                Header: 'Priority',
-                accessor: 'priority',
+                Header: 'Copies',
+                accessor: 'copies',
                 filterable: true,
                 Cell: props => {
                     return (
-                        <span data-priority={props.original.priority}>
+                        <span data-priority={props.original.copies}>
+                            {props.value}
+                        </span>
+                    );
+                },
+            },
+            {
+                Header: 'Available',
+                accessor: 'available',
+                filterable: true,
+                Cell: props => {
+                    return (
+                        <span data-priority={props.original.available}>
                             {props.value}
                         </span>
                     );
@@ -158,7 +187,7 @@ class ItemsList extends Component {
                             minRows={10}
                         />
                     ) : (
-                        `No items to render... :(`
+                        `Loading books...`
                     )}
             </Wrapper>
         );

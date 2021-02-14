@@ -3,12 +3,14 @@ const HOME = '/';
 const ABOUT = '/about';
 const SIGN_UP = '/signup';
 const LOG_IN = '/login';
+const ADMIN = '/admin';
 
 // Post routes
 const ITEMS = '/items';
 const ITEM = '/item/:id';
 const ITEM_INSERT = '/item/create';
 const ITEM_UPDATE = '/item/update/:id';
+const ITEM_BORROW = '/item/borrow/:id';
 
 export const routes = {
     HOME,
@@ -19,4 +21,6 @@ export const routes = {
     ITEM,
     ITEM_INSERT,
     ITEM_UPDATE,
+    ITEM_BORROW,
+    ADMIN,
 };
